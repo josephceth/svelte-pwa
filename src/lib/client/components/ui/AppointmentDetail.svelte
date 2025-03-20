@@ -1,5 +1,6 @@
 <!-- AppointmentDetail.svelte -->
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { createEventDispatcher } from 'svelte';
 	import { goto } from '$app/navigation';
 	const dispatch = createEventDispatcher();
@@ -40,10 +41,30 @@
 		return `${date} ${startTime} - ${endTime}`;
 	};
 
-	// Create Google Maps URL
-	$: mapsUrl = `https://maps.google.com?q=${encodeURIComponent(
-		`${appointment.address.street} ${appointment.address.city} ${appointment.address.state} ${appointment.address.zipCode}`
-	)}`;
+	// Detect iOS device
+	function isIOS() {
+		if (!browser) return false;
+		return (
+			/iPad|iPhone|iPod/.test(navigator.userAgent) ||
+			(navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+		);
+	}
+
+	let mapsUrl: string;
+
+	// Create Maps URL based on device
+	$: {
+		const address = `${appointment.address.street} ${appointment.address.city} ${appointment.address.state} ${appointment.address.zipCode}`;
+		const encodedAddress = encodeURIComponent(address);
+
+		if (isIOS()) {
+			// Apple Maps URL format
+			mapsUrl = `maps://?address=${encodedAddress}`;
+		} else {
+			// Google Maps URL format
+			mapsUrl = `https://maps.google.com?q=${encodedAddress}`;
+		}
+	}
 
 	function handleClose() {
 		dispatch('close');
@@ -55,7 +76,7 @@
 	}
 
 	function viewWorkOrderDetails() {
-		goto(`/workorder?id=${appointment.workOrderId}`);
+		goto(`/workOrder?id=${appointment.workOrderId}`);
 	}
 </script>
 
