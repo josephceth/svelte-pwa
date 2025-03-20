@@ -2,6 +2,7 @@
 	import AppointmentCard from '$lib/client/components/ui/AppointmentCard.svelte';
 	import AppointmentDetail from '$lib/client/components/ui/AppointmentDetail.svelte';
 	import { slide } from 'svelte/transition';
+	import { goto } from '$app/navigation';
 
 	interface Address {
 		street: string;
