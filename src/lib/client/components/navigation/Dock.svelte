@@ -1,5 +1,9 @@
-<div class="dock">
-	<button>
+<script lang="ts">
+	import { goto } from '$app/navigation';
+</script>
+
+<div class="dock dock-lg">
+	<button on:click={() => goto('/')}>
 		<svg class="size-[1.2em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
 			><g fill="currentColor" stroke-linejoin="miter" stroke-linecap="butt"
 				><polyline
