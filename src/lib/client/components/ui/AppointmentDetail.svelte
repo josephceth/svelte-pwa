@@ -76,7 +76,7 @@
 	}
 
 	function viewWorkOrderDetails() {
-		goto(`/workOrder?id=${appointment.workOrderId}`);
+		goto(`/workorder?id=${appointment.workOrderId}`);
 	}
 </script>
 
