@@ -54,7 +54,7 @@
 
 	// Create Maps URL based on device
 	$: {
-		const address = `${appointment.address.street} ${appointment.address.city} ${appointment.address.state} ${appointment.address.zipCode}`;
+		const address = `${appointment.address.street}, ${appointment.address.city}, ${appointment.address.state} ${appointment.address.zipCode}`;
 		const encodedAddress = encodeURIComponent(address);
 
 		if (isIOS()) {
