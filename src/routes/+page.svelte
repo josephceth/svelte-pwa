@@ -3,6 +3,14 @@
 	import AppointmentDetail from '$lib/client/components/ui/AppointmentDetail.svelte';
 	import { slide } from 'svelte/transition';
 
+	// Format today's date
+	const today = new Date();
+	const formattedDate = new Intl.DateTimeFormat('en-US', {
+		weekday: 'long',
+		month: 'long',
+		day: 'numeric'
+	}).format(today);
+
 	// Mock appointments data
 	const appointments = [
 		{
@@ -87,6 +95,11 @@
 		}
 	];
 
+	// Get today's appointments count
+	const todaysAppointments = appointments.filter(
+		(apt) => apt.startDateTime.toDateString() === today.toDateString()
+	);
+
 	let selectedAppointment: (typeof appointments)[0] | null = null;
 
 	function handleAppointmentClick(appointment: (typeof appointments)[0]) {
@@ -95,26 +108,51 @@
 </script>
 
 <div class="container mx-auto flex flex-col gap-4 p-4">
+	<!-- Header Section -->
+	<div class="bg-base-200 -mx-4 -mt-4 flex flex-col gap-0.5 px-4 py-3">
+		<h1 class="text-base-content text-lg font-medium">{formattedDate}</h1>
+		<p class="text-base">{appointments.length} visits today</p>
+	</div>
+
+	<!-- Appointments Section - Carousel on mobile, Grid on tablet+ -->
 	<div class="relative">
-		<div class="carousel carousel-start rounded-box space-x-4">
-			{#each appointments as appointment}
-				<div class="carousel-item">
-					<div
-						class="cursor-pointer"
-						on:click={() => handleAppointmentClick(appointment)}
-						on:keydown={(e) => e.key === 'Enter' && handleAppointmentClick(appointment)}
-						role="button"
-						tabindex="0"
-					>
-						<AppointmentCard {appointment} />
+		<!-- Mobile View -->
+		<div class="md:hidden">
+			<div class="carousel carousel-start rounded-box space-x-4">
+				{#each appointments as appointment}
+					<div class="carousel-item">
+						<div
+							class="cursor-pointer"
+							on:click={() => handleAppointmentClick(appointment)}
+							on:keydown={(e) => e.key === 'Enter' && handleAppointmentClick(appointment)}
+							role="button"
+							tabindex="0"
+						>
+							<AppointmentCard {appointment} />
+						</div>
 					</div>
+				{/each}
+			</div>
+			<!-- Gradient indicators for mobile -->
+			<div
+				class="from-base-100 pointer-events-none absolute top-0 right-0 h-full w-20 bg-gradient-to-l to-transparent"
+			></div>
+		</div>
+
+		<!-- Tablet/Desktop View -->
+		<div class="hidden gap-4 md:grid md:grid-cols-2 lg:grid-cols-3">
+			{#each appointments as appointment}
+				<div
+					class="cursor-pointer"
+					on:click={() => handleAppointmentClick(appointment)}
+					on:keydown={(e) => e.key === 'Enter' && handleAppointmentClick(appointment)}
+					role="button"
+					tabindex="0"
+				>
+					<AppointmentCard {appointment} />
 				</div>
 			{/each}
 		</div>
-		<!-- Gradient indicators for more content -->
-		<div
-			class="from-base-100 pointer-events-none absolute top-0 right-0 h-full w-20 bg-gradient-to-l to-transparent"
-		></div>
 	</div>
 
 	{#if selectedAppointment}
