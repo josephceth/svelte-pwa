@@ -47,6 +47,11 @@
 	function handleClose() {
 		dispatch('close');
 	}
+
+	function viewLocationNotes() {
+		// TODO: Implement location notes view
+		console.log('View location notes');
+	}
 </script>
 
 <div class="w-full md:mx-auto md:max-w-lg">
@@ -86,38 +91,89 @@
 			<!-- Location Info -->
 			<div class="flex flex-col">
 				<span class="text-sm opacity-70">Location</span>
-				<a href={mapsUrl} target="_blank" rel="noopener noreferrer" class="group">
-					<div class="flex items-center gap-1">
-						<span class="group-hover:text-primary text-base font-medium transition-colors">
-							{appointment.locationName}
-						</span>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							class="group-hover:text-primary text-base-content/70 h-4 w-4 transition-colors"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-							/>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-							/>
-						</svg>
+				<div class="dropdown">
+					<div role="button" tabindex="0" class="group cursor-pointer">
+						<div class="flex items-center gap-1">
+							<span class="group-hover:text-primary text-base font-medium transition-colors">
+								{appointment.locationName}
+							</span>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="group-hover:text-primary text-base-content/70 h-4 w-4 transition-colors"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+								/>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+								/>
+							</svg>
+						</div>
+						<div class="group-hover:text-primary text-sm transition-colors">
+							{appointment.address.street}<br />
+							{appointment.address.city}, {appointment.address.state}
+							{appointment.address.zipCode}
+						</div>
 					</div>
-					<div class="group-hover:text-primary text-sm transition-colors">
-						{appointment.address.street}<br />
-						{appointment.address.city}, {appointment.address.state}
-						{appointment.address.zipCode}
-					</div>
-				</a>
+					<ul class="dropdown-content menu bg-neutral rounded-box z-[1] w-52 p-2 shadow-lg">
+						<li>
+							<a
+								href={mapsUrl}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="text-neutral-content hover:bg-neutral-focus"
+							>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="h-4 w-4"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								>
+									<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+									<circle cx="12" cy="10" r="3" />
+								</svg>
+								Navigate
+							</a>
+						</li>
+						<li>
+							<button
+								on:click={viewLocationNotes}
+								class="text-neutral-content hover:bg-neutral-focus"
+							>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="h-4 w-4"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								>
+									<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+									<polyline points="14 2 14 8 20 8" />
+									<line x1="16" y1="13" x2="8" y2="13" />
+									<line x1="16" y1="17" x2="8" y2="17" />
+									<polyline points="10 9 9 9 8 9" />
+								</svg>
+								View Notes
+							</button>
+						</li>
+					</ul>
+				</div>
 			</div>
 
 			<!-- Time Info -->
