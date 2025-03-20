@@ -10,7 +10,7 @@ const ASSETS = [...build, ...files];
 const API_CACHE = 'api-cache-v1';
 
 // Add API routes to cache
-const API_ROUTES = ['/api/user/appointments'];
+const API_ROUTES = ['/api/user/appointments', '/api/user/workorder'];
 
 self.addEventListener('install', (event) => {
 	async function addFilesToCache() {
@@ -51,12 +51,15 @@ self.addEventListener('fetch', (event) => {
 			try {
 				const response = await fetch(event.request);
 				if (response.ok) {
+					console.log('caching response');
 					apiCache.put(event.request, response.clone());
 					return response;
 				}
 			} catch {
+				console.log('no response, checking cache');
 				const cachedResponse = await apiCache.match(event.request);
 				if (cachedResponse) {
+					console.log('returning cached response');
 					return cachedResponse;
 				}
 			}
