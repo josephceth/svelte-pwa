@@ -10,7 +10,7 @@ const ASSETS = [...build, ...files];
 const API_CACHE = 'api-cache-v1';
 
 // Add API routes to cache
-const API_ROUTES = ['/api/projects'];
+const API_ROUTES = ['/api/user/appointments'];
 
 self.addEventListener('install', (event) => {
 	async function addFilesToCache() {

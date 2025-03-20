@@ -3,6 +3,32 @@
 	import AppointmentDetail from '$lib/client/components/ui/AppointmentDetail.svelte';
 	import { slide } from 'svelte/transition';
 
+	interface Address {
+		street: string;
+		city: string;
+		state: string;
+		zipCode: string;
+	}
+
+	interface Appointment {
+		clientName: string;
+		locationName: string;
+		workOrderId: string;
+		startDateTime: Date;
+		endDateTime: Date;
+		title: string;
+		description: string;
+		address: Address;
+	}
+
+	// Get data from layout
+	export let data;
+	$: appointments = data.appointments.map((apt: Partial<Appointment>) => ({
+		...apt,
+		startDateTime: new Date(apt.startDateTime!),
+		endDateTime: new Date(apt.endDateTime!)
+	}));
+
 	// Format today's date
 	const today = new Date();
 	const formattedDate = new Intl.DateTimeFormat('en-US', {
@@ -11,93 +37,9 @@
 		day: 'numeric'
 	}).format(today);
 
-	// Mock appointments data
-	const appointments = [
-		{
-			clientName: 'John Smith',
-			locationName: 'Downtown Office Building',
-			workOrderId: 'WO-2024-1234',
-			startDateTime: new Date('2024-03-20T09:00:00'),
-			endDateTime: new Date('2024-03-20T11:00:00'),
-			title: 'HVAC Quarterly Maintenance',
-			description:
-				'Perform quarterly maintenance on rooftop HVAC units 1-4. Check filters, belts, and refrigerant levels. Clean condenser coils and verify proper operation of all units.',
-			address: {
-				street: '123 Business Ave',
-				city: 'Downtown',
-				state: 'NY',
-				zipCode: '10001'
-			}
-		},
-		{
-			clientName: 'Sarah Johnson',
-			locationName: 'Westside Mall',
-			workOrderId: 'WO-2024-1235',
-			startDateTime: new Date('2024-03-20T13:00:00'),
-			endDateTime: new Date('2024-03-20T15:00:00'),
-			title: 'Escalator Safety Inspection',
-			description:
-				'Conduct monthly safety inspection of main entrance escalators. Check drive chains, step tracks, and handrail systems. Test emergency stop mechanisms and verify proper speed control.',
-			address: {
-				street: '789 Mall Boulevard',
-				city: 'Westside',
-				state: 'NY',
-				zipCode: '10002'
-			}
-		},
-		{
-			clientName: 'Mike Williams',
-			locationName: 'North Station Complex',
-			workOrderId: 'WO-2024-1236',
-			startDateTime: new Date('2024-03-20T16:00:00'),
-			endDateTime: new Date('2024-03-20T18:00:00'),
-			title: 'Emergency Lighting System Test',
-			description:
-				'Perform annual emergency lighting system inspection. Test battery backup systems, replace failed bulbs, and verify proper coverage in all emergency exit routes.',
-			address: {
-				street: '456 Station Road',
-				city: 'North City',
-				state: 'NY',
-				zipCode: '10003'
-			}
-		},
-		{
-			clientName: 'Emily Davis',
-			locationName: 'Central Park Hotel',
-			workOrderId: 'WO-2024-1237',
-			startDateTime: new Date('2024-03-21T09:00:00'),
-			endDateTime: new Date('2024-03-21T11:00:00'),
-			title: 'Kitchen Exhaust Cleaning',
-			description:
-				'Complete quarterly cleaning of main kitchen exhaust system. Clean hood filters, ductwork, and exhaust fans. Inspect fire suppression system and verify proper airflow.',
-			address: {
-				street: '321 Park Avenue',
-				city: 'Central City',
-				state: 'NY',
-				zipCode: '10004'
-			}
-		},
-		{
-			clientName: 'Robert Brown',
-			locationName: 'Tech Plaza',
-			workOrderId: 'WO-2024-1238',
-			startDateTime: new Date('2024-03-21T13:00:00'),
-			endDateTime: new Date('2024-03-21T15:00:00'),
-			title: 'Access Control System Maintenance',
-			description:
-				'Perform scheduled maintenance on building access control system. Test card readers, update firmware, verify door sensors, and check backup power systems.',
-			address: {
-				street: '555 Tech Drive',
-				city: 'Innovation',
-				state: 'NY',
-				zipCode: '10005'
-			}
-		}
-	];
-
 	// Get today's appointments count
-	const todaysAppointments = appointments.filter(
-		(apt) => apt.startDateTime.toDateString() === today.toDateString()
+	$: todaysAppointments = appointments.filter(
+		(apt: Appointment) => apt.startDateTime.toDateString() === today.toDateString()
 	);
 
 	let selectedAppointment: (typeof appointments)[0] | null = null;
@@ -116,25 +58,29 @@
 
 	<!-- Appointments Carousel -->
 	<div class="relative">
-		<div class="carousel carousel-start rounded-box space-x-4">
-			{#each appointments as appointment}
-				<div class="carousel-item">
-					<div
-						class="cursor-pointer"
-						on:click={() => handleAppointmentClick(appointment)}
-						on:keydown={(e) => e.key === 'Enter' && handleAppointmentClick(appointment)}
-						role="button"
-						tabindex="0"
-					>
-						<AppointmentCard {appointment} />
+		{#if appointments.length === 0}
+			<div class="text-base-content/70 py-8 text-center">No appointments found.</div>
+		{:else}
+			<div class="carousel carousel-start rounded-box space-x-4">
+				{#each appointments as appointment}
+					<div class="carousel-item">
+						<div
+							class="cursor-pointer"
+							on:click={() => handleAppointmentClick(appointment)}
+							on:keydown={(e) => e.key === 'Enter' && handleAppointmentClick(appointment)}
+							role="button"
+							tabindex="0"
+						>
+							<AppointmentCard {appointment} />
+						</div>
 					</div>
-				</div>
-			{/each}
-		</div>
-		<!-- Gradient indicators for more content -->
-		<div
-			class="from-base-100 pointer-events-none absolute top-0 right-0 h-full w-20 bg-gradient-to-l to-transparent"
-		></div>
+				{/each}
+			</div>
+			<!-- Gradient indicators for more content -->
+			<div
+				class="from-base-100 pointer-events-none absolute top-0 right-0 h-full w-20 bg-gradient-to-l to-transparent"
+			></div>
+		{/if}
 	</div>
 
 	{#if selectedAppointment}
