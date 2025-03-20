@@ -114,45 +114,27 @@
 		<p class="text-base">{appointments.length} visits today</p>
 	</div>
 
-	<!-- Appointments Section - Carousel on mobile, Grid on tablet+ -->
+	<!-- Appointments Carousel -->
 	<div class="relative">
-		<!-- Mobile View -->
-		<div class="md:hidden">
-			<div class="carousel carousel-start rounded-box space-x-4">
-				{#each appointments as appointment}
-					<div class="carousel-item">
-						<div
-							class="cursor-pointer"
-							on:click={() => handleAppointmentClick(appointment)}
-							on:keydown={(e) => e.key === 'Enter' && handleAppointmentClick(appointment)}
-							role="button"
-							tabindex="0"
-						>
-							<AppointmentCard {appointment} />
-						</div>
-					</div>
-				{/each}
-			</div>
-			<!-- Gradient indicators for mobile -->
-			<div
-				class="from-base-100 pointer-events-none absolute top-0 right-0 h-full w-20 bg-gradient-to-l to-transparent"
-			></div>
-		</div>
-
-		<!-- Tablet/Desktop View -->
-		<div class="hidden gap-4 md:grid md:grid-cols-2 lg:grid-cols-3">
+		<div class="carousel carousel-start rounded-box space-x-4">
 			{#each appointments as appointment}
-				<div
-					class="cursor-pointer"
-					on:click={() => handleAppointmentClick(appointment)}
-					on:keydown={(e) => e.key === 'Enter' && handleAppointmentClick(appointment)}
-					role="button"
-					tabindex="0"
-				>
-					<AppointmentCard {appointment} />
+				<div class="carousel-item">
+					<div
+						class="cursor-pointer"
+						on:click={() => handleAppointmentClick(appointment)}
+						on:keydown={(e) => e.key === 'Enter' && handleAppointmentClick(appointment)}
+						role="button"
+						tabindex="0"
+					>
+						<AppointmentCard {appointment} />
+					</div>
 				</div>
 			{/each}
 		</div>
+		<!-- Gradient indicators for more content -->
+		<div
+			class="from-base-100 pointer-events-none absolute top-0 right-0 h-full w-20 bg-gradient-to-l to-transparent"
+		></div>
 	</div>
 
 	{#if selectedAppointment}
