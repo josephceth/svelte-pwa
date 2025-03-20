@@ -1,5 +1,5 @@
 <script lang="ts">
-	import AppointmentCard from '$lib/components/AppointmentCard.svelte';
+	import AppointmentCard from '$lib/client/components/ui/AppointmentCard.svelte';
 
 	// Mock appointments data
 	const appointments = [
@@ -42,7 +42,7 @@
 </script>
 
 <div class="relative">
-	<div class="carousel carousel-start space-x-2 rounded-box p-4">
+	<div class="carousel carousel-start rounded-box space-x-2 p-4">
 		{#each appointments as appointment}
 			<div class="carousel-item">
 				<AppointmentCard {appointment} />
@@ -51,7 +51,7 @@
 	</div>
 	<!-- Gradient indicators for more content -->
 	<div
-		class="pointer-events-none absolute right-0 top-0 h-full w-20 bg-gradient-to-l from-base-100 to-transparent"
+		class="from-base-100 pointer-events-none absolute top-0 right-0 h-full w-20 bg-gradient-to-l to-transparent"
 	></div>
 </div>
 
