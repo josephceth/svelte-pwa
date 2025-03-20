@@ -1,6 +1,7 @@
 <!-- AppointmentDetail.svelte -->
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
+	import { goto } from '$app/navigation';
 	const dispatch = createEventDispatcher();
 
 	export let appointment: {
@@ -51,6 +52,10 @@
 	function viewLocationNotes() {
 		// TODO: Implement location notes view
 		console.log('View location notes');
+	}
+
+	function viewWorkOrderDetails() {
+		goto(`/workorder/${appointment.workOrderId}`);
 	}
 </script>
 
@@ -169,7 +174,7 @@
 									<line x1="16" y1="17" x2="8" y2="17" />
 									<polyline points="10 9 9 9 8 9" />
 								</svg>
-								View Notes
+								View Location Notes
 							</button>
 						</li>
 					</ul>
@@ -186,8 +191,8 @@
 
 			<!-- Action Buttons -->
 			<div class="card-actions mt-2 justify-stretch">
-				<button class="btn btn-primary flex-1">Start Work</button>
-				<button class="btn btn-outline flex-1">Reschedule</button>
+				<button class="btn btn-primary flex-1">On My Way</button>
+				<button class="btn btn-outline flex-1" on:click={viewWorkOrderDetails}>View Details</button>
 			</div>
 		</div>
 	</div>
