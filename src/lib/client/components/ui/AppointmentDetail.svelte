@@ -9,6 +9,8 @@
 		workOrderId: string;
 		startDateTime: Date;
 		endDateTime: Date;
+		title: string;
+		description: string;
 		address: {
 			street: string;
 			city: string;
@@ -37,9 +39,12 @@
 <div class="w-full md:mx-auto md:max-w-lg">
 	<div class="card bg-base-100 shadow-xl">
 		<div class="card-body gap-4">
-			<!-- Header with Work Order ID -->
+			<!-- Header with Work Order ID and Close Button -->
 			<div class="flex items-center justify-between">
-				<h2 class="card-title text-primary">{appointment.workOrderId}</h2>
+				<div>
+					<h2 class="card-title text-primary">{appointment.workOrderId}</h2>
+					<h3 class="mt-1 text-lg font-semibold">{appointment.title}</h3>
+				</div>
 				<button class="btn btn-circle btn-ghost" on:click={handleClose}>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -56,6 +61,11 @@
 						/>
 					</svg>
 				</button>
+			</div>
+
+			<!-- Description -->
+			<div class="bg-base-200 rounded-lg p-3 text-sm">
+				{appointment.description}
 			</div>
 
 			<!-- Client and Location Info -->
