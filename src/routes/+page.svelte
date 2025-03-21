@@ -116,7 +116,11 @@
 								role="button"
 								tabindex="0"
 							>
-								<AppointmentCard {appointment} />
+								<AppointmentCard
+									{appointment}
+									appointmentIndex={index}
+									totalAppointments={appointments.length}
+								/>
 							</div>
 						</div>
 					{/each}

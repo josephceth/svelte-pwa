@@ -13,6 +13,16 @@
 		};
 	};
 
+	// Add appointment counter props
+	export let appointmentIndex: number | undefined = undefined;
+	export let totalAppointments: number | undefined = undefined;
+
+	// Derive appointment count display text
+	$: appointmentCountText =
+		appointmentIndex !== undefined && totalAppointments !== undefined
+			? `${appointmentIndex + 1}/${totalAppointments}`
+			: '';
+
 	// Helper function to format dates
 	const formatTime = (date: Date) => {
 		return date.toLocaleString('en-US', {
@@ -38,12 +48,19 @@
 	<div class="h-2 bg-gradient-to-r from-[#00293d] to-[#004866]"></div>
 
 	<div class="w-full p-4">
-		<!-- Visit info -->
-		<div class="mb-2">
-			<h2 class="text-xl font-semibold text-gray-800">
-				Visit for {appointment.clientName}
-			</h2>
-			<p class="text-sm text-gray-700">{appointment.locationName}</p>
+		<!-- Visit info with counter badge -->
+		<div class="mb-2 flex items-start justify-between">
+			<div>
+				<h2 class="text-xl font-semibold text-gray-800">
+					Visit for {appointment.clientName}
+				</h2>
+				<p class="text-sm text-gray-700">{appointment.locationName}</p>
+			</div>
+			{#if appointmentCountText}
+				<div class="rounded border border-gray-200 bg-gray-50 px-1.5 py-0.5 text-xs text-gray-500">
+					{appointmentCountText}
+				</div>
+			{/if}
 		</div>
 
 		<!-- Address (if available) -->
