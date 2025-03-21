@@ -50,48 +50,95 @@
 	}
 </script>
 
-<div class="container mx-auto flex flex-col gap-4 p-4">
-	<!-- Header Section -->
-	<div class="bg-base-200 -mx-4 -mt-4 flex flex-col gap-0.5 px-4 py-3">
-		<h1 class="text-base-content text-lg font-medium">{formattedDate}</h1>
-		<p class="text-base">{appointments.length} visits today</p>
+<div class="flex w-full flex-col">
+	<!-- Header Section - Full width with dark blue background -->
+	<div class="flex w-full items-center justify-between bg-[#00293d] px-4 py-4 text-white">
+		<div>
+			<h1 class="text-lg font-medium">{formattedDate}</h1>
+			<p class="text-base opacity-90">{appointments.length} visits today</p>
+		</div>
+		<div class="flex items-center space-x-4">
+			<button class="text-white">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="h-6 w-6"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor"
+				>
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+					/>
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+					/>
+				</svg>
+			</button>
+			<button class="text-white">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="h-6 w-6"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor"
+				>
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+					/>
+				</svg>
+			</button>
+		</div>
 	</div>
 
-	<!-- Appointments Carousel -->
-	<div class="relative">
-		{#if appointments.length === 0}
-			<div class="text-base-content/70 py-8 text-center">No appointments found.</div>
-		{:else}
-			<div class="carousel carousel-start rounded-box space-x-4">
-				{#each appointments as appointment}
-					<div class="carousel-item">
-						<div
-							class="cursor-pointer"
-							on:click={() => handleAppointmentClick(appointment)}
-							on:keydown={(e) => e.key === 'Enter' && handleAppointmentClick(appointment)}
-							role="button"
-							tabindex="0"
-						>
-							<AppointmentCard {appointment} />
+	<!-- Main Content Area - With padding -->
+	<div class="container mx-auto px-4 py-4">
+		<!-- Appointments Carousel -->
+		<div class="relative">
+			{#if appointments.length === 0}
+				<div class="text-base-content/70 py-8 text-center">No appointments found.</div>
+			{:else}
+				<div class="carousel carousel-start rounded-box space-x-4">
+					{#each appointments as appointment, index}
+						<div class="carousel-item">
+							<div
+								class="cursor-pointer"
+								on:click={() => handleAppointmentClick(appointment)}
+								on:keydown={(e) => e.key === 'Enter' && handleAppointmentClick(appointment)}
+								role="button"
+								tabindex="0"
+							>
+								<AppointmentCard {appointment} />
+							</div>
 						</div>
-					</div>
-				{/each}
+					{/each}
+				</div>
+				<!-- Gradient indicators for more content -->
+				<div
+					class="from-base-100 pointer-events-none absolute top-0 right-0 h-full w-20 bg-gradient-to-l to-transparent"
+				></div>
+			{/if}
+		</div>
+
+		{#if selectedAppointment}
+			<div transition:slide={{ duration: 300 }} class="mt-4">
+				<AppointmentDetail
+					appointment={selectedAppointment}
+					appointmentIndex={appointments.indexOf(selectedAppointment)}
+					totalAppointments={appointments.length}
+					on:close={() => (selectedAppointment = null)}
+				/>
 			</div>
-			<!-- Gradient indicators for more content -->
-			<div
-				class="from-base-100 pointer-events-none absolute top-0 right-0 h-full w-20 bg-gradient-to-l to-transparent"
-			></div>
 		{/if}
 	</div>
-
-	{#if selectedAppointment}
-		<div transition:slide={{ duration: 300 }}>
-			<AppointmentDetail
-				appointment={selectedAppointment}
-				on:close={() => (selectedAppointment = null)}
-			/>
-		</div>
-	{/if}
 </div>
 
 <style>
