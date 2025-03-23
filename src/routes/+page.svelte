@@ -2,6 +2,8 @@
 	import AppointmentCard from '$lib/client/components/ui/AppointmentCard.svelte';
 	import AppointmentDetail from '$lib/client/components/ui/AppointmentDetail.svelte';
 	import { slide } from 'svelte/transition';
+	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
 
 	interface Address {
 		street: string;
@@ -50,10 +52,13 @@
 
 	// Use $state for component state
 	let selectedAppointment = $state<(typeof appointments)[0] | null>(null);
-	let isOnline = $state(navigator.onLine);
+	let isOnline = $state(true); // Default to true, will be updated in onMount
 
-	// Listen for online/offline events
-	$effect(() => {
+	onMount(() => {
+		// Set initial online status
+		isOnline = navigator.onLine;
+
+		// Listen for online/offline events
 		const handleOnline = () => (isOnline = true);
 		const handleOffline = () => (isOnline = false);
 
