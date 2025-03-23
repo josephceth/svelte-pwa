@@ -54,6 +54,37 @@
 	let selectedAppointment = $state<(typeof appointments)[0] | null>(null);
 	let isOnline = $state(true); // Default to true, will be updated in onMount
 
+	let cacheData = $state<any>(null);
+	let error = $state<string | null>(null);
+
+	async function getCacheData() {
+		try {
+			// Get the cache
+			const cache = await caches.open('api-cache-v1');
+
+			// Get all cached requests
+			const keys = await cache.keys();
+			const responses = await Promise.all(
+				keys.map(async (key) => {
+					const response = await cache.match(key);
+					const data = await response?.json();
+					return {
+						url: key.url,
+						data
+					};
+				})
+			);
+
+			cacheData = responses;
+		} catch (e) {
+			error = e instanceof Error ? e.message : 'Failed to fetch cache data';
+		}
+	}
+
+	$effect(() => {
+		getCacheData();
+	});
+
 	onMount(() => {
 		// Set initial online status
 		isOnline = navigator.onLine;
@@ -179,6 +210,29 @@
 		{/if}
 	</div>
 </div>
+
+{#if error}
+	<div class="rounded-lg bg-red-50 p-4 text-red-600">
+		Error: {error}
+	</div>
+{:else if !cacheData}
+	<div class="p-4 text-blue-600">Loading cache data...</div>
+{:else}
+	<div class="mx-auto max-w-6xl p-6">
+		<h1 class="mb-6 text-3xl font-bold text-gray-800">Cached API Data</h1>
+		{#each cacheData as item}
+			<div class="mb-6 rounded-lg border border-gray-200 bg-gray-50 p-6 shadow-sm">
+				<h2 class="mb-3 text-lg font-semibold text-blue-700">
+					URL: {item.url}
+				</h2>
+				<pre
+					class="mt-2 overflow-x-auto rounded-lg border border-gray-200 bg-white p-4 font-mono text-sm text-gray-700">
+					{JSON.stringify(item.data, null, 2)}
+				</pre>
+			</div>
+		{/each}
+	</div>
+{/if}
 
 <style>
 	.carousel {

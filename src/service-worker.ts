@@ -10,7 +10,10 @@ const ASSETS = [...build, ...files];
 const API_CACHE = 'api-cache-v1';
 
 // Add API routes to cache
-const API_ROUTES = ['/api/user/appointments', '/api/user/workorder'];
+const API_ROUTES = ['/api/user/appointments'];
+const API_PATTERNS = [
+	/^\/api\/workOrder\/[^/]+$/ // Matches /api/workOrder/any-id
+];
 
 self.addEventListener('install', (event) => {
 	async function addFilesToCache() {
@@ -46,20 +49,23 @@ self.addEventListener('fetch', (event) => {
 		const url = new URL(event.request.url);
 
 		// Handle API routes
-		if (API_ROUTES.includes(url.pathname)) {
+		if (
+			API_ROUTES.includes(url.pathname) ||
+			API_PATTERNS.some((pattern) => pattern.test(url.pathname))
+		) {
 			const apiCache = await caches.open(API_CACHE);
 			try {
 				const response = await fetch(event.request);
 				if (response.ok) {
-					console.log('caching response');
+					console.log('caching response for:', url.pathname);
 					apiCache.put(event.request, response.clone());
 					return response;
 				}
 			} catch {
-				console.log('no response, checking cache');
+				console.log('no response, checking cache for:', url.pathname);
 				const cachedResponse = await apiCache.match(event.request);
 				if (cachedResponse) {
-					console.log('returning cached response');
+					console.log('returning cached response for:', url.pathname);
 					return cachedResponse;
 				}
 			}

@@ -1,5 +1,6 @@
 import { error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
+export const ssr = false;
 
 export const load: PageLoad = async ({ url, fetch }) => {
 	const id = url.searchParams.get('id');
