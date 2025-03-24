@@ -93,3 +93,52 @@ self.addEventListener('fetch', (event) => {
 
 	event.respondWith(respond());
 });
+
+// Add event listener for push notifications
+self.addEventListener('push', (event) => {
+	let notificationData = {};
+
+	try {
+		notificationData = event.data ? event.data.json() : {};
+	} catch (e) {
+		notificationData = {
+			title: 'New Notification',
+			body: event.data ? event.data.text() : 'No details available'
+		};
+	}
+
+	const { title, body, icon, badge, data } = notificationData;
+
+	// Ensure the service worker stays active until the notification is shown
+	event.waitUntil(
+		self.registration.showNotification(title || 'New Message', {
+			body: body || 'You have a new notification',
+			icon: icon || 'pwa-64x64.png',
+			badge: badge || 'pwa-64x64.png',
+			data: data || {}
+		})
+	);
+});
+
+// Handle notification clicks
+self.addEventListener('notificationclick', (event) => {
+	event.notification.close();
+
+	// Add custom click behavior
+	const urlToOpen = event.notification.data?.url || '/';
+
+	event.waitUntil(
+		clients.matchAll({ type: 'window' }).then((clientList) => {
+			// Check if there's already a window open
+			for (const client of clientList) {
+				if (client.url === urlToOpen && 'focus' in client) {
+					return client.focus();
+				}
+			}
+			// If no window is open, open one
+			if (clients.openWindow) {
+				return clients.openWindow(urlToOpen);
+			}
+		})
+	);
+});
