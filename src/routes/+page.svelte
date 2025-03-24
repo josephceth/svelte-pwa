@@ -2,7 +2,6 @@
 	import AppointmentCard from '$lib/client/components/ui/AppointmentCard.svelte';
 	import AppointmentDetail from '$lib/client/components/ui/AppointmentDetail.svelte';
 	import { slide } from 'svelte/transition';
-	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 
 	interface Address {
@@ -25,6 +24,7 @@
 
 	// Get data from layout
 	const { data } = $props();
+	let showCache = $state(false);
 
 	// Process appointments data with Svelte 5 runes
 	const appointments = $derived(
@@ -210,14 +210,17 @@
 		{/if}
 	</div>
 </div>
-
+<div class="flex justify-center">
+	<button class="btn btn-xs btn-primary" onclick={() => (showCache = !showCache)}>Show Cache</button
+	>
+</div>
 {#if error}
 	<div class="rounded-lg bg-red-50 p-4 text-red-600">
 		Error: {error}
 	</div>
 {:else if !cacheData}
 	<div class="p-4 text-blue-600">Loading cache data...</div>
-{:else}
+{:else if showCache}
 	<div class="mx-auto max-w-6xl p-6">
 		<h1 class="mb-6 text-3xl font-bold text-gray-800">Cached API Data</h1>
 		{#each cacheData as item}
