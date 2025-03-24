@@ -33,10 +33,11 @@ In Svelte 5, event handlers are treated as standard HTML properties rather than 
 ```
 
 **After (Svelte 5):**
+
+the $state, $props, and $derrived runes do not have to be imported.
 ```html
 <script>
-  import { $state, $effect, $derived } from 'svelte';
-  
+ 
   // Define state with runes
   let count = $state(0);
   

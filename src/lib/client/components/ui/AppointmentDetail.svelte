@@ -3,6 +3,18 @@
 	import { browser } from '$app/environment';
 	import { createEventDispatcher } from 'svelte';
 	import { goto } from '$app/navigation';
+	import {
+		mdiClose, // For close button
+		mdiMapMarker, // For location
+		mdiCalendar, // For date/time
+		mdiFileDocument, // For work order
+		mdiDotsHorizontal, // For more options menu
+		mdiNoteText, // For location notes
+		mdiPencil, // For add note
+		mdiCurrencyUsd, // For expenses
+		mdiPen, // For signature
+		mdiCamera // For pictures
+	} from '@mdi/js';
 	const dispatch = createEventDispatcher();
 
 	export let appointment: {
@@ -129,19 +141,8 @@
 					{/if}
 				</div>
 				<button class="text-white" on:click={handleClose}>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="h-6 w-6"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M6 18L18 6M6 6l12 12"
-						/>
+					<svg viewBox="0 0 24 24" class="h-6 w-6">
+						<path fill="currentColor" d={mdiClose} />
 					</svg>
 				</button>
 			</div>
@@ -156,25 +157,8 @@
 					rel="noopener noreferrer"
 					class="flex items-center gap-2 text-gray-700 hover:text-[#95c11f]"
 				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="h-5 w-5 text-[#95c11f]"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-						/>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-						/>
+					<svg viewBox="0 0 24 24" class="h-5 w-5 text-[#95c11f]">
+						<path fill="currentColor" d={mdiMapMarker} />
 					</svg>
 					<span>
 						{appointment.address.street}, {appointment.address.city}, {appointment.address.state}
@@ -186,19 +170,8 @@
 			<!-- Date/Time Section -->
 			<div class="flex flex-col gap-1">
 				<div class="flex items-center gap-2 text-gray-700">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="h-5 w-5 text-[#95c11f]"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-						/>
+					<svg viewBox="0 0 24 24" class="h-5 w-5 text-[#95c11f]">
+						<path fill="currentColor" d={mdiCalendar} />
 					</svg>
 					<span>{formatTimeRange(appointment.startDateTime, appointment.endDateTime)}</span>
 				</div>
@@ -213,19 +186,8 @@
 			<!-- Work Order ID Section -->
 			<div class="flex flex-col gap-1">
 				<div class="flex items-center gap-2 text-gray-700">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="h-5 w-5 text-[#95c11f]"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-						/>
+					<svg viewBox="0 0 24 24" class="h-5 w-5 text-[#95c11f]">
+						<path fill="currentColor" d={mdiFileDocument} />
 					</svg>
 					<span class="font-medium">Work Order: {appointment.workOrderId}</span>
 				</div>
@@ -252,15 +214,8 @@
 						role="button"
 						class="btn h-12 w-full border-none bg-gray-200 text-gray-700 hover:bg-gray-300"
 					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							class="h-5 w-5"
-							viewBox="0 0 20 20"
-							fill="currentColor"
-						>
-							<path
-								d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"
-							/>
+						<svg viewBox="0 0 24 24" class="h-5 w-5">
+							<path fill="currentColor" d={mdiDotsHorizontal} />
 						</svg>
 					</div>
 					<ul
@@ -272,19 +227,8 @@
 								on:click={viewLocationNotes}
 								class="flex items-center gap-2 py-2 text-gray-700 hover:bg-gray-50"
 							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									class="h-5 w-5 text-[#95c11f]"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-									/>
+								<svg viewBox="0 0 24 24" class="h-5 w-5 text-[#95c11f]">
+									<path fill="currentColor" d={mdiNoteText} />
 								</svg>
 								<span>View Location Notes</span>
 							</button>
@@ -294,19 +238,8 @@
 								on:click={addNote}
 								class="flex items-center gap-2 py-2 text-gray-700 hover:bg-gray-50"
 							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									class="h-5 w-5 text-[#95c11f]"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-									/>
+								<svg viewBox="0 0 24 24" class="h-5 w-5 text-[#95c11f]">
+									<path fill="currentColor" d={mdiPencil} />
 								</svg>
 								<span>Add Note</span>
 							</button>
@@ -316,19 +249,8 @@
 								on:click={addExpense}
 								class="flex items-center gap-2 py-2 text-gray-700 hover:bg-gray-50"
 							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									class="h-5 w-5 text-[#95c11f]"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-									/>
+								<svg viewBox="0 0 24 24" class="h-5 w-5 text-[#95c11f]">
+									<path fill="currentColor" d={mdiCurrencyUsd} />
 								</svg>
 								<span>Add Expense</span>
 							</button>
@@ -338,19 +260,8 @@
 								on:click={getSignature}
 								class="flex items-center gap-2 py-2 text-gray-700 hover:bg-gray-50"
 							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									class="h-5 w-5 text-[#95c11f]"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-									/>
+								<svg viewBox="0 0 24 24" class="h-5 w-5 text-[#95c11f]">
+									<path fill="currentColor" d={mdiPen} />
 								</svg>
 								<span>Get Signature</span>
 							</button>
@@ -360,25 +271,8 @@
 								on:click={takePictures}
 								class="flex items-center gap-2 py-2 text-gray-700 hover:bg-gray-50"
 							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									class="h-5 w-5 text-[#95c11f]"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
-									/>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
-									/>
+								<svg viewBox="0 0 24 24" class="h-5 w-5 text-[#95c11f]">
+									<path fill="currentColor" d={mdiCamera} />
 								</svg>
 								<span>Take Pictures</span>
 							</button>
