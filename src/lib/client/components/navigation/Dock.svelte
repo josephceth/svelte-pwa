@@ -1,5 +1,24 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+
+	// Update the middle button to link to notifications
+	const dockItems = [
+		{
+			href: '/',
+			icon: 'home',
+			label: 'Home'
+		},
+		{
+			href: '/notification-test',
+			icon: 'bell', // or 'notifications' depending on your icon system
+			label: 'Notifications'
+		},
+		{
+			href: '/settings',
+			icon: 'settings',
+			label: 'Settings'
+		}
+	];
 </script>
 
 <div class="dock dock-lg">
@@ -35,7 +54,7 @@
 		<span class="dock-label">Home</span>
 	</button>
 
-	<button>
+	<button on:click={() => goto('/notification-test')}>
 		<svg class="size-[1.2em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
 			><g fill="currentColor" stroke-linejoin="miter" stroke-linecap="butt"
 				><polyline
