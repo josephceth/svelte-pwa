@@ -26,7 +26,8 @@
 		}
 	}
 
-	function handleSubmit() {
+	function handleSubmit(e: Event) {
+		e.preventDefault();
 		// Mock submission
 		console.log('Submitting note:', {
 			workOrderId,
@@ -48,7 +49,7 @@
 					<h2 class="text-lg font-medium">Add Note</h2>
 					<p class="text-sm opacity-80">Work Order: {workOrderId}</p>
 				</div>
-				<button class="text-white" on:click={handleClose} aria-label="Close note form">
+				<button class="text-white" onclick={handleClose} aria-label="Close note form">
 					<Icon path={mdiClose} class_name="h-6 w-6" />
 				</button>
 			</div>
@@ -56,7 +57,7 @@
 
 		<!-- Form Body -->
 		<div class="p-4">
-			<form on:submit|preventDefault={handleSubmit} class="space-y-4">
+			<form onsubmit={handleSubmit} class="space-y-4">
 				<!-- Note Input -->
 				<div class="space-y-2">
 					<label for="note" class="block text-sm font-medium text-gray-700"> Note </label>
@@ -78,7 +79,7 @@
 						>
 							<Icon path={mdiImage} class_name="h-6 w-6 text-gray-400" />
 							<span class="text-sm text-gray-600">Click to upload image</span>
-							<input type="file" accept="image/*" class="hidden" on:change={handleImageSelect} />
+							<input type="file" accept="image/*" class="hidden" onchange={handleImageSelect} />
 						</label>
 
 						{#if imagePreview}
@@ -87,7 +88,7 @@
 								<button
 									type="button"
 									class="absolute top-2 right-2 rounded-full bg-red-500 p-1 text-white hover:bg-red-600"
-									on:click={() => {
+									onclick={() => {
 										imageFile = null;
 										imagePreview = null;
 									}}
@@ -105,7 +106,7 @@
 					<button
 						type="button"
 						class="flex items-center gap-2 rounded-lg border border-gray-300 px-3 py-2 text-sm hover:border-[#95c11f]"
-						on:click={() => (isPrivate = !isPrivate)}
+						onclick={() => (isPrivate = !isPrivate)}
 					>
 						<Icon
 							path={isPrivate ? mdiLock : mdiLockOpen}

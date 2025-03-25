@@ -1,8 +1,6 @@
 <script lang="ts">
 	import { mdiHome, mdiBell, mdiCog } from '@mdi/js';
 
-	let { children } = $props();
-
 	const dockItems = [
 		{
 			href: '/',
@@ -22,7 +20,7 @@
 	];
 </script>
 
-<nav class="fixed bottom-0 w-full border-t border-gray-800 bg-gray-900 px-4 py-2">
+<nav class="fixed bottom-0 w-full border-t border-gray-800 bg-gray-900 px-4 pt-2 pb-6">
 	<div class="mx-auto flex max-w-screen-xl items-center justify-around">
 		{#each dockItems as item}
 			<a
