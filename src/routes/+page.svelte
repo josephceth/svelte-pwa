@@ -1,8 +1,13 @@
 <script lang="ts">
-	import AppointmentCard from '$lib/client/components/ui/AppointmentCard.svelte';
-	import AppointmentDetail from '$lib/client/components/ui/AppointmentDetail.svelte';
-	import { slide } from 'svelte/transition';
+	import AssignmentCard from '$lib/client/components/ui/AssignmentCard.svelte';
+	import AssignmentDetailCard from '$lib/client/components/ui/AssignmentDetailCard.svelte';
+	import { slide, fly } from 'svelte/transition';
 	import { onMount } from 'svelte';
+	import {
+		mdiCog, // For settings gear
+		mdiBell // For notification bell
+	} from '@mdi/js';
+	import NoteForm from '$lib/client/components/notes/NoteForm.svelte';
 
 	interface Address {
 		street: string;
@@ -57,6 +62,10 @@
 	let cacheData = $state<any>(null);
 	let error = $state<string | null>(null);
 
+	// Add state for note form visibility
+	let showNoteForm = $state(false);
+	let activeWorkOrderId = $state<string | null>(null);
+
 	async function getCacheData() {
 		try {
 			// Get the cache
@@ -105,6 +114,17 @@
 	function handleAppointmentClick(appointment: (typeof appointments)[0]) {
 		selectedAppointment = selectedAppointment === appointment ? null : appointment;
 	}
+
+	// Handler for note form visibility
+	function handleShowNoteForm(workOrderId: string) {
+		activeWorkOrderId = workOrderId;
+		showNoteForm = true;
+	}
+
+	function handleCloseNoteForm() {
+		showNoteForm = false;
+		activeWorkOrderId = null;
+	}
 </script>
 
 <div class="flex w-full flex-col">
@@ -112,25 +132,8 @@
 	<div class="flex w-full items-center justify-between bg-[#00293d] px-4 py-4 text-white">
 		<!-- Settings gear on the left -->
 		<button class="text-white">
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				class="h-6 w-6"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke="currentColor"
-			>
-				<path
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					stroke-width="2"
-					d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-				/>
-				<path
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					stroke-width="2"
-					d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-				/>
+			<svg viewBox="0 0 24 24" class="h-6 w-6">
+				<path fill="currentColor" d={mdiCog} />
 			</svg>
 		</button>
 
@@ -147,19 +150,8 @@
 				<span class="opacity-90">{isOnline ? 'Online' : 'Offline'}</span>
 			</div>
 			<button class="text-white">
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					class="h-6 w-6"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke="currentColor"
-				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-					/>
+				<svg viewBox="0 0 24 24" class="h-6 w-6">
+					<path fill="currentColor" d={mdiBell} />
 				</svg>
 			</button>
 		</div>
@@ -182,7 +174,7 @@
 								role="button"
 								tabindex="0"
 							>
-								<AppointmentCard
+								<AssignmentCard
 									{appointment}
 									appointmentIndex={index}
 									totalAppointments={appointments.length}
@@ -200,11 +192,12 @@
 
 		{#if selectedAppointment}
 			<div transition:slide={{ duration: 300 }} class="mt-4">
-				<AppointmentDetail
+				<AssignmentDetailCard
 					appointment={selectedAppointment}
 					appointmentIndex={appointments.indexOf(selectedAppointment)}
 					totalAppointments={appointments.length}
 					on:close={() => (selectedAppointment = null)}
+					on:addNote={() => handleShowNoteForm(selectedAppointment.workOrderId)}
 				/>
 			</div>
 		{/if}
@@ -234,6 +227,13 @@
 				</pre>
 			</div>
 		{/each}
+	</div>
+{/if}
+
+<!-- Note Form Layer -->
+{#if showNoteForm}
+	<div class="fixed inset-0 z-50 bg-white" transition:fly={{ x: '100%', duration: 300 }}>
+		<NoteForm workOrderId={activeWorkOrderId} on:close={handleCloseNoteForm} />
 	</div>
 {/if}
 

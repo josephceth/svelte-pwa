@@ -3,6 +3,7 @@
 	import { browser } from '$app/environment';
 	import { createEventDispatcher } from 'svelte';
 	import { goto } from '$app/navigation';
+	import Icon from './Icon.svelte';
 	import {
 		mdiClose, // For close button
 		mdiMapMarker, // For location
@@ -15,6 +16,7 @@
 		mdiPen, // For signature
 		mdiCamera // For pictures
 	} from '@mdi/js';
+	import NoteForm from '../notes/NoteForm.svelte';
 	const dispatch = createEventDispatcher();
 
 	export let appointment: {
@@ -107,8 +109,7 @@
 	}
 
 	function addNote() {
-		// TODO: Implement add note functionality
-		console.log('Add note clicked');
+		dispatch('addNote');
 	}
 
 	function addExpense() {
@@ -140,10 +141,8 @@
 						<p class="text-xs opacity-80">{appointmentCountText}</p>
 					{/if}
 				</div>
-				<button class="text-white" on:click={handleClose}>
-					<svg viewBox="0 0 24 24" class="h-6 w-6">
-						<path fill="currentColor" d={mdiClose} />
-					</svg>
+				<button class="text-white" on:click={handleClose} aria-label="Close appointment details">
+					<Icon path={mdiClose} class_name="h-6 w-6" />
 				</button>
 			</div>
 		</div>
@@ -157,9 +156,7 @@
 					rel="noopener noreferrer"
 					class="flex items-center gap-2 text-gray-700 hover:text-[#95c11f]"
 				>
-					<svg viewBox="0 0 24 24" class="h-5 w-5 text-[#95c11f]">
-						<path fill="currentColor" d={mdiMapMarker} />
-					</svg>
+					<Icon path={mdiMapMarker} class_name="h-5 w-5 text-[#95c11f]" />
 					<span>
 						{appointment.address.street}, {appointment.address.city}, {appointment.address.state}
 						{appointment.address.zipCode}
@@ -170,9 +167,7 @@
 			<!-- Date/Time Section -->
 			<div class="flex flex-col gap-1">
 				<div class="flex items-center gap-2 text-gray-700">
-					<svg viewBox="0 0 24 24" class="h-5 w-5 text-[#95c11f]">
-						<path fill="currentColor" d={mdiCalendar} />
-					</svg>
+					<Icon path={mdiCalendar} class_name="h-5 w-5 text-[#95c11f]" />
 					<span>{formatTimeRange(appointment.startDateTime, appointment.endDateTime)}</span>
 				</div>
 			</div>
@@ -186,9 +181,7 @@
 			<!-- Work Order ID Section -->
 			<div class="flex flex-col gap-1">
 				<div class="flex items-center gap-2 text-gray-700">
-					<svg viewBox="0 0 24 24" class="h-5 w-5 text-[#95c11f]">
-						<path fill="currentColor" d={mdiFileDocument} />
-					</svg>
+					<Icon path={mdiFileDocument} class_name="h-5 w-5 text-[#95c11f]" />
 					<span class="font-medium">Work Order: {appointment.workOrderId}</span>
 				</div>
 			</div>
@@ -212,11 +205,10 @@
 					<div
 						tabindex="0"
 						role="button"
+						aria-label="More options"
 						class="btn h-12 w-full border-none bg-gray-200 text-gray-700 hover:bg-gray-300"
 					>
-						<svg viewBox="0 0 24 24" class="h-5 w-5">
-							<path fill="currentColor" d={mdiDotsHorizontal} />
-						</svg>
+						<Icon path={mdiDotsHorizontal} class_name="h-5 w-5" />
 					</div>
 					<ul
 						tabindex="0"
@@ -227,9 +219,7 @@
 								on:click={viewLocationNotes}
 								class="flex items-center gap-2 py-2 text-gray-700 hover:bg-gray-50"
 							>
-								<svg viewBox="0 0 24 24" class="h-5 w-5 text-[#95c11f]">
-									<path fill="currentColor" d={mdiNoteText} />
-								</svg>
+								<Icon path={mdiNoteText} class_name="h-5 w-5 text-[#95c11f]" />
 								<span>View Location Notes</span>
 							</button>
 						</li>
@@ -238,9 +228,7 @@
 								on:click={addNote}
 								class="flex items-center gap-2 py-2 text-gray-700 hover:bg-gray-50"
 							>
-								<svg viewBox="0 0 24 24" class="h-5 w-5 text-[#95c11f]">
-									<path fill="currentColor" d={mdiPencil} />
-								</svg>
+								<Icon path={mdiPencil} class_name="h-5 w-5 text-[#95c11f]" />
 								<span>Add Note</span>
 							</button>
 						</li>
@@ -249,9 +237,7 @@
 								on:click={addExpense}
 								class="flex items-center gap-2 py-2 text-gray-700 hover:bg-gray-50"
 							>
-								<svg viewBox="0 0 24 24" class="h-5 w-5 text-[#95c11f]">
-									<path fill="currentColor" d={mdiCurrencyUsd} />
-								</svg>
+								<Icon path={mdiCurrencyUsd} class_name="h-5 w-5 text-[#95c11f]" />
 								<span>Add Expense</span>
 							</button>
 						</li>
@@ -260,9 +246,7 @@
 								on:click={getSignature}
 								class="flex items-center gap-2 py-2 text-gray-700 hover:bg-gray-50"
 							>
-								<svg viewBox="0 0 24 24" class="h-5 w-5 text-[#95c11f]">
-									<path fill="currentColor" d={mdiPen} />
-								</svg>
+								<Icon path={mdiPen} class_name="h-5 w-5 text-[#95c11f]" />
 								<span>Get Signature</span>
 							</button>
 						</li>
@@ -271,9 +255,7 @@
 								on:click={takePictures}
 								class="flex items-center gap-2 py-2 text-gray-700 hover:bg-gray-50"
 							>
-								<svg viewBox="0 0 24 24" class="h-5 w-5 text-[#95c11f]">
-									<path fill="currentColor" d={mdiCamera} />
-								</svg>
+								<Icon path={mdiCamera} class_name="h-5 w-5 text-[#95c11f]" />
 								<span>Take Pictures</span>
 							</button>
 						</li>
