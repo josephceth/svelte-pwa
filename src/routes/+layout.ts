@@ -4,9 +4,9 @@ import { sessionData } from '$lib/stores/auth.svelte';
 
 export const ssr = false;
 export const load: LayoutLoad = async ({ fetch, url }) => {
-	if (!sessionData.sessionId && !url.pathname.startsWith('/login')) {
-		redirect(302, '/login');
-	}
+	// if (!sessionData.sessionId && !url.pathname.startsWith('/login')) {
+	// 	redirect(302, '/login');
+	// }
 	console.log('loading layout');
 	const response = await fetch('/api/user/appointments');
 	const appointments = await response.json();
